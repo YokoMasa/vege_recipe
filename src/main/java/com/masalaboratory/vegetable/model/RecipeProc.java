@@ -8,7 +8,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "RecipeProc")
+@Table(name = "recipeproc")
 public class RecipeProc {
 
     @Id
@@ -51,6 +51,12 @@ public class RecipeProc {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    @Override
+    public String toString() {
+        return "RecipeProc [description=" + description + ", id=" + id + ", imageUrl=" + imageUrl + ", recipe=" + recipe
+                + "]";
     }
 
 }

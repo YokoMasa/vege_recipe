@@ -53,4 +53,9 @@ public class Ingredient {
         this.quantity = quantity;
     }
 
+    @Override
+    public String toString() {
+        return "Ingredient [id=" + id + ", name=" + name + ", quantity=" + quantity + ", recipe=" + recipe + "]";
+    }
+
 }

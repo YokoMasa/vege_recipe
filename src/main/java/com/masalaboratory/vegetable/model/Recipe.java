@@ -103,4 +103,20 @@ public class Recipe {
         this.recipeProcOrder = recipeProcOrder;
     }
 
+    @Override
+    public String toString() {
+        return "Recipe [headerImageUrl=" + headerImageUrl + ", id=" + id + ", ingredientOrder=" + ingredientOrder
+                + ", ingredients.size=" + ingredients.size() + ", longDescription=" + longDescription + ", name=" + name
+                + ", recipeProcOrder=" + recipeProcOrder + ", recipeProcs.size=" + recipeProcs.size() + ", shortDescription="
+                + shortDescription + ", thumbnailUrl=" + thumbnailUrl + "]";
+    }
+
+    public Set<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
+    public Set<RecipeProc> getRecipeProcs() {
+        return recipeProcs;
+    }
+
 }
