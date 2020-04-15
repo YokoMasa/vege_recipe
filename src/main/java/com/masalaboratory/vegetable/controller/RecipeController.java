@@ -5,11 +5,11 @@ import java.util.List;
 import com.masalaboratory.vegetable.controller.form.RecipeForm;
 import com.masalaboratory.vegetable.model.Image;
 import com.masalaboratory.vegetable.model.Recipe;
+import com.masalaboratory.vegetable.repository.ImageRepository;
 import com.masalaboratory.vegetable.repository.RecipeRepository;
 import com.masalaboratory.vegetable.service.ImageService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -17,8 +17,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 @RequestMapping("/recipe")
 public class RecipeController {
 
@@ -26,13 +27,16 @@ public class RecipeController {
     private RecipeRepository recipeRepository;
 
     @Autowired
+    private ImageRepository imageRepository;
+
+    @Autowired
     private ImageService imageService;
 
     @GetMapping
-    private String list(Model model) {
+    private String list() {
         List<Recipe> recipes = recipeRepository.findAll();
-        model.addAttribute("test", "Recipe!!");
-        model.addAttribute("recipes", recipes);
+        Recipe r = recipes.get(0);
+        System.out.println(r);
         return "recipe";
     }
 
@@ -44,6 +48,7 @@ public class RecipeController {
         try {
             Image raw = imageService.save(form.getImage());
             Image thumbnail = imageService.createResizedImageFrom(raw, 300);
+            imageRepository.save(thumbnail);
         } catch (Exception e) {
             e.printStackTrace();
         }
