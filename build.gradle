@@ -26,7 +26,9 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
 	compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.19'
+	compile group: 'com.drewnoakes', name: 'metadata-extractor', version: '2.6.2'
 
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
