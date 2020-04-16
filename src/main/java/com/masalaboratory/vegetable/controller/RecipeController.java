@@ -11,6 +11,10 @@ import com.masalaboratory.vegetable.util.SavedImage;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,7 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/recipe")
+@RequestMapping(path = "/recipe", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RecipeController {
 
     @Autowired
@@ -33,43 +37,48 @@ public class RecipeController {
     private ImageSaveHelper imageSaveHelper;
 
     @GetMapping("/{id}")
-    private Recipe get(@PathVariable int id) {
-        return recipeService.getById(id);
+    private ResponseEntity<Recipe> get(@PathVariable final int id) {
+        final Recipe r =  recipeService.getById(id);
+        if (r == null) {
+            System.out.println("r == null!!");
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok().body(r);
     }
 
     @GetMapping
-    private List<Recipe> list(@RequestParam(name = "page", defaultValue = "0") int pageNum) {
-        Page<Recipe> page = recipeService.getPage(pageNum);
+    private List<Recipe> list(@RequestParam(name = "page", defaultValue = "0") final int pageNum) {
+        final Page<Recipe> page = recipeService.getPage(pageNum);
         return page.toList();
     }
 
     @PostMapping
-    private String create(@Validated @ModelAttribute final RecipeForm form, BindingResult bindingResult) {
+    private ResponseEntity<?> create(@Validated @ModelAttribute final RecipeForm form, final BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             System.out.println("validation error!");
-            return "validation error!";
+            return ResponseEntity.badRequest().body(bindingResult.getFieldErrors());
         }
 
         Image raw = null;
         Image thumbnail = null;
         if (form.getImage() != null) {
             try {
-                SavedImage siRaw = imageSaveHelper.save(form.getImage());
+                final SavedImage siRaw = imageSaveHelper.save(form.getImage());
                 raw = Image.from(siRaw);
-                SavedImage siThumbnail = imageSaveHelper.createResizedImageFrom(siRaw, 300);
+                final SavedImage siThumbnail = imageSaveHelper.createResizedImageFrom(siRaw, 300);
                 thumbnail = Image.from(siThumbnail);
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 e.printStackTrace();
             }
         }
-        Recipe r = Recipe.from(form, raw, thumbnail);
-        recipeService.create(r);
-        return "recipe_created";
+        final Recipe r = Recipe.from(form, raw, thumbnail);
+        final Recipe created = recipeService.create(r);
+        return ResponseEntity.ok().body(created);
     }
 
     @DeleteMapping("/{id}")
-    private String delete(@PathVariable int id) {
-        Recipe r = recipeService.delete(id);
+    private ResponseEntity<?> delete(@PathVariable final int id) {
+        final Recipe r = recipeService.delete(id);
         try {
             if (r.getHeaderImage() != null) {
                 imageSaveHelper.delete(r.getHeaderImage().toSavedImage());
@@ -77,10 +86,10 @@ public class RecipeController {
             if (r.getThumbnail() != null) {
                 imageSaveHelper.delete(r.getThumbnail().toSavedImage());
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
-        return "deleted";
+        return ResponseEntity.ok().build();
     }
 
 }

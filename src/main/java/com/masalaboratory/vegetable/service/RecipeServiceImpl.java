@@ -1,5 +1,7 @@
 package com.masalaboratory.vegetable.service;
 
+import java.util.Optional;
+
 import com.masalaboratory.vegetable.model.Image;
 import com.masalaboratory.vegetable.model.Recipe;
 import com.masalaboratory.vegetable.repository.ImageRepository;
@@ -30,7 +32,12 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public Recipe getById(int id) {
-        return recipeRepository.getOne(id);
+        Optional<Recipe> oRecipe = recipeRepository.findById(id);
+        if (oRecipe.isPresent()) {
+            return oRecipe.get();
+        } else {
+            return null;
+        }
     }
 
     @Override
