@@ -2,12 +2,17 @@ package com.masalaboratory.vegetable.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
+import com.masalaboratory.vegetable.util.SavedImage;
 
 @Entity
 public class Image {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
 
@@ -37,9 +42,20 @@ public class Image {
         this.url = url;
     }
 
+    public SavedImage toSavedImage() {
+        return new SavedImage(savePath, url);
+    }
+
     @Override
     public String toString() {
         return "Image [id=" + id + ", savePath=" + savePath + ", url=" + url + "]";
+    }
+
+    public static Image from(SavedImage i) {
+        Image image = new Image();
+        image.setSavePath(i.savePath);
+        image.setUrl(i.url);
+        return image;
     }
     
 }

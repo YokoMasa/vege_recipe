@@ -4,11 +4,15 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.masalaboratory.vegetable.controller.form.RecipeForm;
 
 @Entity
 @Table(name = "Recipe")
@@ -16,6 +20,7 @@ public class Recipe {
 
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(name = "name")
@@ -131,5 +136,20 @@ public class Recipe {
                 + shortDescription + ", thumbnail=" + thumbnail + "]";
     }
 
+    public static Recipe from(RecipeForm form, Image header, Image thumbnail) {
+        Recipe r = new Recipe();
+        r.setHeaderImage(header);
+        r.setThumbnail(thumbnail);
+        r.setName(form.getName());
+        r.setShortDescription(form.getShortDescription());
+        r.setLongDescription(form.getLongDescription());
+        r.setRecipeProcOrder(form.getRecipeProcOrder());
+        r.setIngredientOrder(form.getIngredientOrder());
+        return r;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
     
 }

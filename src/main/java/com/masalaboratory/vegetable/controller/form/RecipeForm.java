@@ -1,5 +1,6 @@
 package com.masalaboratory.vegetable.controller.form;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 import org.springframework.lang.NonNull;
@@ -7,15 +8,15 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class RecipeForm {
 
-    @NonNull
+    @NotBlank
     @Size(max = 255)
     private String name;
 
-    @NonNull
+    @NotBlank
     @Size(max = 511)
     private String shortDescription;
 
-    @NonNull
+    @NotBlank
     @Size(max = 4095)
     private String longDescription;
 

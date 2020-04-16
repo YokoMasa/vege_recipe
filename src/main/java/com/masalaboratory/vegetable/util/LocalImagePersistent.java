@@ -6,8 +6,6 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import com.masalaboratory.vegetable.model.Image;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ResourceUtils;
@@ -57,7 +55,7 @@ public class LocalImagePersistent implements ImagePersistent {
     }
 
     @Override
-    public Image save(MultipartFile file) throws IOException {
+    public SavedImage save(MultipartFile file) throws IOException {
         String originalFileName = file.getOriginalFilename();
         String fileName = createFileName(extractExt(originalFileName));
         System.out.println(fileName);
@@ -65,28 +63,21 @@ public class LocalImagePersistent implements ImagePersistent {
         File dest = createSaveFile(fileName);
         file.transferTo(dest);
 
-        Image i = new Image();
-        i.setSavePath(dest.getAbsolutePath());
-        i.setUrl(createUrl(fileName));
-        return i;
+        return new SavedImage(dest.getAbsolutePath(), createUrl(fileName));
     }
 
     @Override
-    public Image save(BufferedImage image) throws IOException {
+    public SavedImage save(BufferedImage image) throws IOException {
         String fileName = createFileName("png");
         File dest = createSaveFile(fileName);
 
         ImageIO.write(image, "png", dest);
-
-        Image i = new Image();
-        i.setSavePath(dest.getAbsolutePath());
-        i.setUrl(createUrl(fileName));
-        return i;
+        return new SavedImage(dest.getAbsolutePath(), createUrl(fileName));
     }
 
     @Override
-    public void delete(Image image) throws IOException {
-        File file = new File(image.getSavePath());
+    public void delete(SavedImage image) throws IOException {
+        File file = new File(image.savePath);
         file.delete();
     }
 
