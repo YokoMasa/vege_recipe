@@ -7,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -28,8 +29,9 @@ public class RecipeProc {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "image_url")
-    private String imageUrl;
+    @OneToOne
+    @JoinColumn(name = "image_id")
+    private Image image;
 
     public int getId() {
         return id;
@@ -51,18 +53,16 @@ public class RecipeProc {
         this.description = description;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public Image getImage() {
+        return image;
     }
 
-    @Override
-    public String toString() {
-        return "RecipeProc [description=" + description + ", id=" + id + ", imageUrl=" + imageUrl + ", recipe=" + recipe
-                + "]";
+    public void setImage(Image image) {
+        this.image = image;
     }
 
 }

@@ -14,3 +14,8 @@ ADD CONSTRAINT
 ADD CONSTRAINT
     FOREIGN KEY (thumbnail_id) REFERENCES Image (id);
 
+ALTER TABLE RecipeProc
+DROP image_url,
+ADD image_id INT,
+ADD CONSTRAINT
+    FOREIGN KEY (image_id) REFERENCES Image (id);
