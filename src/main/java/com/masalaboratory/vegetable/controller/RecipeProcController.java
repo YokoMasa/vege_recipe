@@ -88,10 +88,12 @@ public class RecipeProcController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable(name = "id") int id) {
         RecipeProc deleted = recipeProcService.delete(id);
-        try {
-            imageSaveHelper.delete(deleted.getImage().toSavedImage());
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (deleted.getImage() != null) {
+            try {
+                imageSaveHelper.delete(deleted.getImage().toSavedImage());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return ResponseEntity.ok().build();
     }

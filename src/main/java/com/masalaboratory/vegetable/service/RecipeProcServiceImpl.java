@@ -65,7 +65,10 @@ public class RecipeProcServiceImpl implements RecipeProcService {
 
         RecipeProc target = rp.get();
         recipeProcRepository.delete(target);
-        imageRepository.delete(target.getImage());
+
+        if (target.getImage() != null) {
+            imageRepository.delete(target.getImage());
+        }
         return target;
     }
 
