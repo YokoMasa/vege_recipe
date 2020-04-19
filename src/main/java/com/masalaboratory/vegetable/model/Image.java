@@ -51,6 +51,16 @@ public class Image {
         return "Image [id=" + id + ", savePath=" + savePath + ", url=" + url + "]";
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Image) {
+            Image i = (Image) o;
+            return url.equals(i.getUrl()) && savePath.equals(i.getSavePath());
+        } else {
+            return false;
+        }
+    }
+
     public static Image from(SavedImage i) {
         Image image = new Image();
         image.setSavePath(i.savePath);

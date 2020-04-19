@@ -3,8 +3,10 @@ package com.masalaboratory.vegetable.controller;
 import com.masalaboratory.vegetable.controller.form.RecipeProcForm;
 import com.masalaboratory.vegetable.controller.helper.ImageSaveHelper;
 import com.masalaboratory.vegetable.model.Image;
+import com.masalaboratory.vegetable.model.Recipe;
 import com.masalaboratory.vegetable.model.RecipeProc;
 import com.masalaboratory.vegetable.service.RecipeProcService;
+import com.masalaboratory.vegetable.service.RecipeService;
 import com.masalaboratory.vegetable.util.SavedImage;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,29 +30,35 @@ public class RecipeProcController {
     private ImageSaveHelper imageSaveHelper;
 
     @Autowired
+    private RecipeService recipeService;
+
+    @Autowired
     private RecipeProcService recipeProcService;
 
     @PostMapping
     public ResponseEntity<?> create(@PathVariable(name = "recipeId") int recipeId,
             @Validated @ModelAttribute RecipeProcForm form, BindingResult bindingResult) {
+        Recipe recipe = recipeService.getById(recipeId);
+        if (recipe == null) {
+            return ResponseEntity.notFound().build();
+        }
         if (bindingResult.hasFieldErrors()) {
             return ResponseEntity.badRequest().build();
         }
 
-        RecipeProc r = new RecipeProc();
-        r.setDescription(form.getDescription());
-
+        RecipeProc proc = new RecipeProc();
+        proc.setRecipe(recipe);
+        proc.setDescription(form.getDescription());
         if (form.getImage() != null) {
             try {
                 SavedImage si = imageSaveHelper.save(form.getImage());
                 Image i = Image.from(si);
-                r.setImage(i);
+                proc.setImage(i);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-
-        RecipeProc created = recipeProcService.create(recipeId, r);
+        RecipeProc created = recipeProcService.create(proc);
         if (created == null) {
             return ResponseEntity.badRequest().build();
         }
@@ -64,21 +72,29 @@ public class RecipeProcController {
             return ResponseEntity.badRequest().build();
         }
 
-        RecipeProc r = new RecipeProc();
-        r.setId(id);
-        r.setDescription(form.getDescription());
+        RecipeProc proc = recipeProcService.getById(id);
+        proc.setDescription(form.getDescription());
 
         if (form.getImage() != null) {
             try {
                 SavedImage si = imageSaveHelper.save(form.getImage());
-                Image i = Image.from(si);
-                r.setImage(i);
+                if (proc.getImage() == null) {
+                    Image i = new Image();
+                    i.setSavePath(si.savePath);
+                    i.setUrl(si.url);
+                    proc.setImage(i);
+                } else {
+                    Image i = proc.getImage();
+                    imageSaveHelper.delete(i.toSavedImage());
+                    i.setSavePath(si.savePath);
+                    i.setUrl(si.url);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
-        RecipeProc updated = recipeProcService.update(r);
+        RecipeProc updated = recipeProcService.update(proc);
         if (updated == null) {
             return ResponseEntity.badRequest().build();
         }

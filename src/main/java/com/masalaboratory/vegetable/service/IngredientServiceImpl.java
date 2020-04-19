@@ -31,19 +31,22 @@ public class IngredientServiceImpl implements IngredientService {
 
     @Override
     public Ingredient update(Ingredient newIngredient) {
-        Optional<Ingredient> i = ingredientRepository.findById(newIngredient.getId());
-        if (!i.isPresent()) {
-            return null;
-        }
-        Ingredient target = i.get();
-        target.setName(newIngredient.getName());
-        target.setQuantity(newIngredient.getQuantity());
-        return ingredientRepository.saveAndFlush(target);
+        return ingredientRepository.saveAndFlush(newIngredient);
     }
 
     @Override
     public void delete(int id) {
         ingredientRepository.deleteById(id);
+    }
+
+    @Override
+    public Ingredient getById(int id) {
+        Optional<Ingredient> oIngredient = ingredientRepository.findById(id);
+        if (!oIngredient.isPresent()) {
+            return null;
+        } else {
+            return oIngredient.get();
+        }
     }
 
 }

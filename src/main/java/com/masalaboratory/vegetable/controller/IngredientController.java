@@ -5,6 +5,7 @@ import com.masalaboratory.vegetable.model.Ingredient;
 import com.masalaboratory.vegetable.service.IngredientService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -42,18 +43,16 @@ public class IngredientController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable(name = "id") int id, @Validated @ModelAttribute IngredientForm form, BindingResult bindingResult) {
+        Ingredient i = ingredientService.getById(id);
+        if (i == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
         if (bindingResult.hasFieldErrors()) {
             return ResponseEntity.badRequest().body(bindingResult.getFieldErrors());
         }
-        Ingredient i = new Ingredient();
-        i.setId(id);
         i.setName(form.getName());
         i.setQuantity(form.getQuantity());
-
-        Ingredient updated = ingredientService.update(i);
-        if (updated == null) {
-            return ResponseEntity.badRequest().body("updated == null");
-        }
+        ingredientService.update(i);
         return ResponseEntity.ok().build();
     }
 

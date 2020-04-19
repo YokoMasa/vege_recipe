@@ -3,7 +3,6 @@ package com.masalaboratory.vegetable.controller.form;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-import org.springframework.lang.NonNull;
 import org.springframework.web.multipart.MultipartFile;
 
 public class RecipeForm {
