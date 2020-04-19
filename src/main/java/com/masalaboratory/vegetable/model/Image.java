@@ -42,10 +42,6 @@ public class Image {
         this.url = url;
     }
 
-    public SavedImage toSavedImage() {
-        return new SavedImage(savePath, url);
-    }
-
     @Override
     public String toString() {
         return "Image [id=" + id + ", savePath=" + savePath + ", url=" + url + "]";
@@ -59,13 +55,6 @@ public class Image {
         } else {
             return false;
         }
-    }
-
-    public static Image from(SavedImage i) {
-        Image image = new Image();
-        image.setSavePath(i.savePath);
-        image.setUrl(i.url);
-        return image;
     }
     
 }

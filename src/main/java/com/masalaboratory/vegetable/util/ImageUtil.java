@@ -48,8 +48,8 @@ public final class ImageUtil {
             int width = jpegDirectory.getImageWidth();
             int height = jpegDirectory.getImageHeight();
             return new ImageInformation(orientation, width, height);
-        } catch (MetadataException me) {
-            //me.printStackTrace();
+        } catch (Exception e) {
+            //e.printStackTrace();
             return null;
         }
     }

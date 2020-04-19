@@ -10,6 +10,6 @@ public interface RecipeProcService {
 
     public RecipeProc update(RecipeProc recipeProc);
 
-    public RecipeProc delete(int id);
+    public void delete(int id);
 
 }

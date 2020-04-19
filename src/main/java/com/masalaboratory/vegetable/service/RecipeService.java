@@ -14,6 +14,6 @@ public interface RecipeService {
 
     public Recipe update(Recipe recipe);
 
-    public Recipe delete(int id);
+    public void delete(int id);
 
 }

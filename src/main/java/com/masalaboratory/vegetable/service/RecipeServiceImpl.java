@@ -2,11 +2,8 @@ package com.masalaboratory.vegetable.service;
 
 import java.util.Optional;
 
-import com.masalaboratory.vegetable.model.Image;
 import com.masalaboratory.vegetable.model.Recipe;
-import com.masalaboratory.vegetable.repository.ImageRepository;
 import com.masalaboratory.vegetable.repository.RecipeRepository;
-import com.masalaboratory.vegetable.util.ImagePersistent;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,9 +18,6 @@ public class RecipeServiceImpl implements RecipeService {
     
     @Autowired
     private RecipeRepository recipeRepository;
-
-    @Autowired
-    private ImageRepository imageRepository;
 
     @Override
     public Page<Recipe> getPage(int pageNumber) {
@@ -43,41 +37,17 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public Recipe create(Recipe recipe) {
-        if (recipe.getHeaderImage() != null) {
-            Image header = imageRepository.save(recipe.getHeaderImage());
-            recipe.setHeaderImage(header);
-        }
-
-        if (recipe.getThumbnail() != null) {
-            Image thumbnail = imageRepository.save(recipe.getThumbnail());
-            recipe.setThumbnail(thumbnail);
-        }
         return recipeRepository.saveAndFlush(recipe);
     }
 
     @Override
     public Recipe update(Recipe newRecipe) {
-        if (newRecipe.getHeaderImage() != null) {
-            imageRepository.save(newRecipe.getHeaderImage());
-        }
-
-        if (newRecipe.getThumbnail() != null) {
-            imageRepository.save(newRecipe.getThumbnail());
-        }
         return recipeRepository.saveAndFlush(newRecipe);
     }
 
     @Override
-    public Recipe delete(int id) {
-        Recipe r = getById(id);
-        recipeRepository.delete(r);
-        if (r.getHeaderImage() != null) {
-            imageRepository.delete(r.getHeaderImage());
-        }
-        if (r.getThumbnail() != null) {
-            imageRepository.delete(r.getThumbnail());
-        }
-        return r;
+    public void delete(int id) {
+        recipeRepository.deleteById(id);
     }
 
 }

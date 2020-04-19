@@ -2,10 +2,7 @@ package com.masalaboratory.vegetable.service;
 
 import java.util.Optional;
 
-import com.masalaboratory.vegetable.model.Image;
-import com.masalaboratory.vegetable.model.Recipe;
 import com.masalaboratory.vegetable.model.RecipeProc;
-import com.masalaboratory.vegetable.repository.ImageRepository;
 import com.masalaboratory.vegetable.repository.RecipeProcRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +13,6 @@ public class RecipeProcServiceImpl implements RecipeProcService {
 
     @Autowired
     private RecipeProcRepository recipeProcRepository;
-
-    @Autowired
-    private ImageRepository imageRepository;
 
     @Override
     public RecipeProc getById(int id) {
@@ -31,33 +25,17 @@ public class RecipeProcServiceImpl implements RecipeProcService {
 
     @Override
     public RecipeProc create(RecipeProc recipeProc) {
-        if (recipeProc.getImage() != null) {
-            Image i = imageRepository.save(recipeProc.getImage());
-            recipeProc.setImage(i);
-        }
         return recipeProcRepository.saveAndFlush(recipeProc);
     }
 
     @Override
     public RecipeProc update(RecipeProc newRecipeProc) {
-        if (newRecipeProc.getImage() != null) {
-            imageRepository.save(newRecipeProc.getImage());
-        }
         return recipeProcRepository.saveAndFlush(newRecipeProc);
     }
 
     @Override
-    public RecipeProc delete(int id) {
-        RecipeProc target = getById(id);
-        if (target == null) {
-            return null;
-        }
-
-        recipeProcRepository.delete(target);
-        if (target.getImage() != null) {
-            imageRepository.delete(target.getImage());
-        }
-        return target;
+    public void delete(int id) {
+        recipeProcRepository.deleteById(id);
     }
 
 }

@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(path = "/recipe/{recipeId}/proc", produces = MediaType.APPLICATION_JSON_VALUE)
-public class RecipeProcController {
+public class RecipeProcController extends ImageHandlingController {
 
     @Autowired
     private ImageSaveHelper imageSaveHelper;
@@ -52,17 +52,14 @@ public class RecipeProcController {
         if (form.getImage() != null) {
             try {
                 SavedImage si = imageSaveHelper.save(form.getImage());
-                Image i = Image.from(si);
+                Image i = toImage(si);
                 proc.setImage(i);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        RecipeProc created = recipeProcService.create(proc);
-        if (created == null) {
-            return ResponseEntity.badRequest().build();
-        }
-        return ResponseEntity.ok(created);
+        recipeProcService.create(proc);
+        return ResponseEntity.ok().body(proc);
     }
 
     @PutMapping("/{id}")
@@ -78,39 +75,29 @@ public class RecipeProcController {
         if (form.getImage() != null) {
             try {
                 SavedImage si = imageSaveHelper.save(form.getImage());
-                if (proc.getImage() == null) {
-                    Image i = new Image();
-                    i.setSavePath(si.savePath);
-                    i.setUrl(si.url);
-                    proc.setImage(i);
-                } else {
-                    Image i = proc.getImage();
-                    imageSaveHelper.delete(i.toSavedImage());
-                    i.setSavePath(si.savePath);
-                    i.setUrl(si.url);
-                }
+                Image newImage = updateImage(proc.getImage(), si);
+                proc.setImage(newImage);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
-        RecipeProc updated = recipeProcService.update(proc);
-        if (updated == null) {
-            return ResponseEntity.badRequest().build();
-        }
-        return ResponseEntity.ok(updated);
+        recipeProcService.update(proc);
+        return ResponseEntity.ok().body(proc);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable(name = "id") int id) {
-        RecipeProc deleted = recipeProcService.delete(id);
-        if (deleted.getImage() != null) {
+        
+        RecipeProc proc = recipeProcService.getById(id);
+        if (proc.getImage() != null) {
             try {
-                imageSaveHelper.delete(deleted.getImage().toSavedImage());
+                imageSaveHelper.delete(toSavedImage(proc.getImage()));
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+        recipeProcService.delete(id);
         return ResponseEntity.ok().build();
     }
 

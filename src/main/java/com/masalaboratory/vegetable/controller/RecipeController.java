@@ -7,6 +7,7 @@ import com.masalaboratory.vegetable.controller.helper.APIErrorHelper;
 import com.masalaboratory.vegetable.controller.helper.ImageSaveHelper;
 import com.masalaboratory.vegetable.model.Image;
 import com.masalaboratory.vegetable.model.Recipe;
+import com.masalaboratory.vegetable.model.RecipeProc;
 import com.masalaboratory.vegetable.service.RecipeService;
 import com.masalaboratory.vegetable.util.SavedImage;
 
@@ -29,7 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(path = "/recipe", produces = MediaType.APPLICATION_JSON_VALUE)
-public class RecipeController {
+public class RecipeController extends ImageHandlingController {
 
     @Autowired
     private RecipeService recipeService;
@@ -62,22 +63,25 @@ public class RecipeController {
             System.out.println("validation error!");
             return ResponseEntity.badRequest().body(apiErrorHelper.getValidationError(bindingResult));
         }
+        Recipe target = new Recipe();
+        bindTextFields(target, form);
 
-        Image raw = null;
+        Image header = null;
         Image thumbnail = null;
         if (form.getImage() != null) {
             try {
-                final SavedImage siRaw = imageSaveHelper.save(form.getImage());
-                raw = Image.from(siRaw);
-                final SavedImage siThumbnail = imageSaveHelper.createResizedImageFrom(siRaw, 300);
-                thumbnail = Image.from(siThumbnail);
+                final SavedImage siHeader = imageSaveHelper.save(form.getImage());
+                header = toImage(siHeader);
+                final SavedImage siThumbnail = imageSaveHelper.createResizedImageFrom(siHeader, 300);
+                thumbnail = toImage(siThumbnail);
             } catch (final Exception e) {
                 e.printStackTrace();
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new APIError<>("could not save images"));
             }
         }
-        final Recipe r = Recipe.from(form, raw, thumbnail);
-        final Recipe created = recipeService.create(r);
+        target.setHeaderImage(header);
+        target.setThumbnail(thumbnail);
+        Recipe created = recipeService.create(target);
         return ResponseEntity.ok().body(created);
     }
 
@@ -93,38 +97,16 @@ public class RecipeController {
             return ResponseEntity.badRequest().body(apiErrorHelper.getValidationError(bindingResult));
         }
 
-        target.setName(form.getName());
-        target.setShortDescription(form.getShortDescription());
-        target.setLongDescription(form.getLongDescription());
-        target.setRecipeProcOrder(form.getRecipeProcOrder());
-        target.setIngredientOrder(form.getIngredientOrder());
+        bindTextFields(target, form);
         if (form.getImage() != null) {
             try {
                 final SavedImage siHeader = imageSaveHelper.save(form.getImage());
-                if (target.getHeaderImage() != null) {
-                    Image i = target.getHeaderImage();
-                    imageSaveHelper.delete(i.toSavedImage());
-                    i.setSavePath(siHeader.savePath);
-                    i.setUrl(siHeader.url);
-                } else {
-                    Image i = new Image();
-                    i.setSavePath(siHeader.savePath);
-                    i.setUrl(siHeader.url);
-                    target.setHeaderImage(i);
-                }
+                Image newHeader = updateImage(target.getHeaderImage(), siHeader);
+                target.setHeaderImage(newHeader);
 
                 final SavedImage siThumbnail = imageSaveHelper.createResizedImageFrom(siHeader, 300);
-                if (target.getThumbnail() != null) {
-                    Image i = target.getThumbnail();
-                    imageSaveHelper.delete(i.toSavedImage());
-                    i.setSavePath(siThumbnail.savePath);
-                    i.setUrl(siThumbnail.url);
-                } else {
-                    Image i = new Image();
-                    i.setSavePath(siThumbnail.savePath);
-                    i.setUrl(siThumbnail.url);
-                    target.setThumbnail(i);
-                }
+                Image newThumbnail = updateImage(target.getThumbnail(), siThumbnail);
+                target.setThumbnail(newThumbnail);
             } catch (final Exception e) {
                 e.printStackTrace();
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new APIError<>("could not save images"));
@@ -136,18 +118,32 @@ public class RecipeController {
 
     @DeleteMapping("/{id}")
     private ResponseEntity<?> delete(@PathVariable final int id) {
-        final Recipe r = recipeService.delete(id);
+        Recipe r = recipeService.getById(id);
         try {
             if (r.getHeaderImage() != null) {
-                imageSaveHelper.delete(r.getHeaderImage().toSavedImage());
+                imageSaveHelper.delete(toSavedImage(r.getHeaderImage()));
             }
             if (r.getThumbnail() != null) {
-                imageSaveHelper.delete(r.getThumbnail().toSavedImage());
+                imageSaveHelper.delete(toSavedImage(r.getThumbnail()));
+            }
+            for (RecipeProc proc : r.getRecipeProcs()) {
+                if (proc.getImage() != null) {
+                    imageSaveHelper.delete(toSavedImage(proc.getImage()));
+                }
             }
         } catch (final Exception e) {
             e.printStackTrace();
         }
+        recipeService.delete(id);
         return ResponseEntity.ok().build();
+    }
+
+    private void bindTextFields(Recipe target, RecipeForm form) {
+        target.setName(form.getName());
+        target.setShortDescription(form.getShortDescription());
+        target.setLongDescription(form.getLongDescription());
+        target.setRecipeProcOrder(form.getRecipeProcOrder());
+        target.setIngredientOrder(form.getIngredientOrder());
     }
 
 }

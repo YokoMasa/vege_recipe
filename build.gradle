@@ -6,12 +6,14 @@ plugins {
 	id "org.flywaydb.flyway" version "6.3.3"
 }
 
+/*
 flyway {
     url = 'jdbc:mysql://localhost:3306/vegetable?characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B9:00'
     user = 'root'
     password = 'mysql'
 	locations = ["filesystem:$projectDir/src/main/resources/db/migration"]
 }
+*/
 
 group = 'com.masalaboratory'
 version = '0.0.1-SNAPSHOT'
@@ -27,6 +29,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
+	compile "org.flywaydb:flyway-core:6.3.3"
 	compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.19'
 	compile group: 'com.drewnoakes', name: 'metadata-extractor', version: '2.6.2'
 

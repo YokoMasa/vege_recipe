@@ -2,6 +2,7 @@ package com.masalaboratory.vegetable.model;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,8 +12,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import com.masalaboratory.vegetable.controller.form.RecipeForm;
 
 @Entity
 @Table(name = "Recipe")
@@ -32,23 +31,23 @@ public class Recipe {
     @Column(name = "long_description")
     private String longDescription;
 
-    @OneToMany(mappedBy = "recipe")
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
     private Set<Ingredient> ingredients; 
 
     @Column(name = "ingredient_order")
     private String ingredientOrder;
 
-    @OneToMany(mappedBy = "recipe")
+    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
     private Set<RecipeProc> recipeProcs;
 
     @Column(name = "recipe_proc_order")
     private String recipeProcOrder;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "header_image_id")
     private Image headerImage;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "thumbnail_id")
     private Image thumbnail;
 
@@ -134,18 +133,6 @@ public class Recipe {
                 + ", ingredientSize=" + ingredients.size() + ", longDescription=" + longDescription + ", name=" + name
                 + ", recipeProcOrder=" + recipeProcOrder + ", recipeProcSize=" + recipeProcs.size() + ", shortDescription="
                 + shortDescription + ", thumbnail=" + thumbnail + "]";
-    }
-
-    public static Recipe from(RecipeForm form, Image header, Image thumbnail) {
-        Recipe r = new Recipe();
-        r.setHeaderImage(header);
-        r.setThumbnail(thumbnail);
-        r.setName(form.getName());
-        r.setShortDescription(form.getShortDescription());
-        r.setLongDescription(form.getLongDescription());
-        r.setRecipeProcOrder(form.getRecipeProcOrder());
-        r.setIngredientOrder(form.getIngredientOrder());
-        return r;
     }
 
     public void setId(int id) {
