@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(path = "/recipe", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/api/recipe", produces = MediaType.APPLICATION_JSON_VALUE)
 public class APIRecipeController extends ImageHandlingController {
 
     @Autowired
