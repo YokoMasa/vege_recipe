@@ -81,5 +81,29 @@ public class LocalImagePersistent implements ImagePersistent {
         file.delete();
     }
 
+    @Override
+    public void deleteAll() throws IOException {
+        File file = ResourceUtils.getFile(getSavePath());
+        deleteFile(file);
+    }
+
+    private void deleteFile(File f) {
+        if (f.isDirectory()) {
+            for (File file: f.listFiles()) {
+                deleteFile(file);
+            }
+        } else {
+            f.delete();
+        }
+    }
+
+    @Override
+    public boolean exists(SavedImage image) throws IOException {
+        File file = new File(image.savePath);
+        return file.exists();
+    }
+
+    
+
 
 }

@@ -1,6 +1,8 @@
 package com.masalaboratory.vegetable.controller;
 
 import com.masalaboratory.vegetable.controller.form.IngredientForm;
+import com.masalaboratory.vegetable.controller.helper.APIErrorHelper;
+import com.masalaboratory.vegetable.controller.helper.APIErrorHelper.APIFieldError;
 import com.masalaboratory.vegetable.model.Ingredient;
 import com.masalaboratory.vegetable.service.IngredientService;
 
@@ -23,21 +25,24 @@ import org.springframework.web.bind.annotation.RestController;
 public class IngredientController {
 
     @Autowired
-    IngredientService ingredientService;
+    private IngredientService ingredientService;
+
+    @Autowired
+    private APIErrorHelper apiErrorHelper;
 
     @PostMapping
     public ResponseEntity<?> create(@PathVariable(name = "recipeId") int recipeId, @Validated @ModelAttribute IngredientForm form, BindingResult bindingResult) {
         if (bindingResult.hasFieldErrors()) {
+            for (APIFieldError e: apiErrorHelper.getValidationError(bindingResult).getData()) {
+                System.out.println(e);
+            }
             return ResponseEntity.badRequest().body(bindingResult.getFieldErrors());
         }
         Ingredient i = new Ingredient();
         i.setName(form.getName());
         i.setQuantity(form.getQuantity());
         
-        Ingredient created = ingredientService.create(recipeId, i);
-        if (created == null) {
-            return ResponseEntity.badRequest().build();
-        }
+        ingredientService.create(recipeId, i);
         return ResponseEntity.ok().build();
     }
 

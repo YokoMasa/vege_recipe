@@ -20,6 +20,11 @@ public class APIErrorHelper {
             this.name = name;
             this.message = message;
         }
+
+        @Override
+        public String toString() {
+            return "name: " + name + ", message: " + message;
+        }
     }
 
     public APIError<List<APIFieldError>> getValidationError(BindingResult br) {

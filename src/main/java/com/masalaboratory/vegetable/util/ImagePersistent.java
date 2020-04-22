@@ -13,4 +13,8 @@ public interface ImagePersistent {
 
     public void delete(SavedImage image) throws IOException;
 
+    public void deleteAll() throws IOException;
+
+    public boolean exists(SavedImage image) throws IOException;
+
 }
