@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(path = "/recipe/{recipeId}/ingredient", produces = MediaType.APPLICATION_JSON_VALUE)
-public class IngredientController {
+public class APIIngredientController {
 
     @Autowired
     private IngredientService ingredientService;

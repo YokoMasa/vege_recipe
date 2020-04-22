@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(path = "/recipe/{recipeId}/proc", produces = MediaType.APPLICATION_JSON_VALUE)
-public class RecipeProcController extends ImageHandlingController {
+public class APIRecipeProcController extends ImageHandlingController {
 
     @Autowired
     private ImageSaveHelper imageSaveHelper;
