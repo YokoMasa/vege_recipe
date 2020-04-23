@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="base::head_tag(こんにちはaa, ~{::link})">
+    <link rel="stylesheet" th:href="@{/css/recipe_list.css}">
+    <meta charset="UTF-8" />
+</head>
+<body>
+    <div id="wrapper">
+        <div th:replace="base::header"></div>
+    
+        <div id="recipeListContainer">
+            <div th:each="recipe : ${page.toList()}" class="recipe">
+                <div>
+                    <div class="recipe-thumbnailWrapper">
+                        <img th:if="${recipe.thumbnail != null}" th:src="${recipe.thumbnail.url}" class="recipe-thumbnail">
+                        <div th:if="${recipe.thumbnail == null}" class="recipe-withoutThumbnail"></div>
+                    </div>
+                    <div th:text="${recipe.name}" class="recipe-name"></div>
+                    <div th:text="${recipe.shortDescription}" class="recipe-shortDescription"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

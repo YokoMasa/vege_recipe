@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:fragment="head_tag(title, links)">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/base.css}">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap" rel="stylesheet">
+    <title th:text="${title}">title</title>
+    <th:block th:replace="${links}" />
+</head>
+
+<div th:fragment="header" id="header">
+    <div class="header-title">おいしく健康に</div>
+    <div class="header-description">健康的でおいしいごはんのレシピを紹介します</div>
+</div>
+
+</html>
