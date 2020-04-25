@@ -6,6 +6,14 @@
     flex-wrap: wrap;
 }
 
+a {
+    text-decoration: none;
+}
+
+a:active {
+    text-decoration: none;
+}
+
 .recipe {
     box-sizing: border-box;
     width: 33.3%;
@@ -48,4 +56,23 @@
 .recipe-shortDescription {
     color: #333;
     font-size: 10pt;
+}
+
+@media (max-width: 700px) {
+    #recipeListContainer {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .recipe {
+        width: 85%;
+    }
+
+    .recipe-thumbnail {
+        height: 260px;
+    }
+
+    .recipe-withoutThumbnail {
+        height: 260px;
+    }
 }
