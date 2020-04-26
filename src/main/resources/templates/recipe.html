@@ -16,7 +16,7 @@
             <div class="recipe-infoWrapper">
                 <img th:if="${recipe.thumbnail != null}" th:src="${recipe.headerImage.url}" class="recipe-image">
                 <div class="recipe-ingredientsWrapper">
-                    <p class="recipe-headline nomargin">材料</p>
+                    <p class="recipe-headline nomargin">材料（<span th:text="${recipe.serving}"></span>）</p>
                     <div th:each="i: ${recipe.ingredients}" class="recipe-ingredient">
                         <span th:text="${i.name}" class="recipe-ingredient-name"></span>
                         <span th:text="${i.quantity}" class="recipe-ingredient-quantity"></span>

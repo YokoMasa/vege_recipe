@@ -1,5 +1,6 @@
 package com.masalaboratory.vegetable.model;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -13,6 +14,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "Recipe")
@@ -31,6 +34,13 @@ public class Recipe implements Identifiable {
 
     @Column(name = "long_description")
     private String longDescription;
+
+    @Column(name = "create_date")
+    @Temporal(TemporalType.DATE)
+    private Date createDate;
+
+    @Column(name = "serving")
+    private String serving;
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
     private List<Ingredient> ingredients; 
@@ -139,5 +149,22 @@ public class Recipe implements Identifiable {
     public void setId(int id) {
         this.id = id;
     }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public String getServing() {
+        return serving;
+    }
+
+    public void setServing(String serving) {
+        this.serving = serving;
+    }
+
     
 }

@@ -1,35 +1,28 @@
 package com.masalaboratory.vegetable.service;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
 import com.masalaboratory.vegetable.model.Identifiable;
-import com.masalaboratory.vegetable.model.Ingredient;
 import com.masalaboratory.vegetable.model.Recipe;
-import com.masalaboratory.vegetable.model.RecipeProc;
 import com.masalaboratory.vegetable.repository.RecipeRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
 public class RecipeServiceImpl implements RecipeService {
 
-    private static final int PAGE_SIZE = 15;
-
     @Autowired
     private RecipeRepository recipeRepository;
 
     @Override
     public Page<Recipe> getPage(int pageNumber) {
-        Pageable pageable = PageRequest.of(pageNumber, PAGE_SIZE);
+        Pageable pageable = recipeRepository.getPagable(pageNumber);
         return recipeRepository.findAll(pageable);
     }
 
