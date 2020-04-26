@@ -7,7 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class Image {
+public class Image implements Identifiable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

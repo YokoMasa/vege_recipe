@@ -15,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "recipeproc")
-public class RecipeProc {
+public class RecipeProc implements Identifiable {
 
     @Id
     @Column(name = "id")

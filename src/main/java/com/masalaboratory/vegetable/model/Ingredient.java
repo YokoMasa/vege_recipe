@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "Ingredient")
-public class Ingredient {
+public class Ingredient implements Identifiable {
 
     @Id
     @Column(name = "id")

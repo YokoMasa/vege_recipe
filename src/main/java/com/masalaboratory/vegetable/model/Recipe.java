@@ -1,5 +1,6 @@
 package com.masalaboratory.vegetable.model;
 
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -15,7 +16,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "Recipe")
-public class Recipe {
+public class Recipe implements Identifiable {
 
     @Id
     @Column(name = "id")
@@ -32,13 +33,13 @@ public class Recipe {
     private String longDescription;
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
-    private Set<Ingredient> ingredients; 
+    private List<Ingredient> ingredients; 
 
     @Column(name = "ingredient_order")
     private String ingredientOrder;
 
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL)
-    private Set<RecipeProc> recipeProcs;
+    private List<RecipeProc> recipeProcs;
 
     @Column(name = "recipe_proc_order")
     private String recipeProcOrder;
@@ -95,19 +96,19 @@ public class Recipe {
         this.recipeProcOrder = recipeProcOrder;
     }
 
-    public Set<Ingredient> getIngredients() {
+    public List<Ingredient> getIngredients() {
         return ingredients;
     }
 
-    public Set<RecipeProc> getRecipeProcs() {
+    public List<RecipeProc> getRecipeProcs() {
         return recipeProcs;
     }
 
-    public void setIngredients(Set<Ingredient> ingredients) {
+    public void setIngredients(List<Ingredient> ingredients) {
         this.ingredients = ingredients;
     }
 
-    public void setRecipeProcs(Set<RecipeProc> recipeProcs) {
+    public void setRecipeProcs(List<RecipeProc> recipeProcs) {
         this.recipeProcs = recipeProcs;
     }
 
