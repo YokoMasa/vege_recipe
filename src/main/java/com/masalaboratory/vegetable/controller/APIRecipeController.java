@@ -45,7 +45,7 @@ public class APIRecipeController extends ImageHandlingController {
     private ResponseEntity<?> get(@PathVariable final int id) {
         final Recipe r =  recipeService.getById(id);
         if (r == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiErrorHelper.getNotFoundError());
         }
         return ResponseEntity.ok().body(r);
     }
@@ -74,7 +74,7 @@ public class APIRecipeController extends ImageHandlingController {
                 thumbnail = toImage(siThumbnail);
             } catch (final Exception e) {
                 e.printStackTrace();
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new APIError<>("could not save images"));
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(apiErrorHelper.getInternalServerError());
             }
         }
         target.setHeaderImage(header);
@@ -87,7 +87,7 @@ public class APIRecipeController extends ImageHandlingController {
     private ResponseEntity<?> update(@PathVariable(name = "id") int id, @Validated @ModelAttribute RecipeForm form, BindingResult bindingResult) {
         Recipe target = recipeService.getById(id);
         if (target == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiErrorHelper.getNotFoundError());
         }
 
         if (bindingResult.hasErrors()) {
@@ -106,7 +106,7 @@ public class APIRecipeController extends ImageHandlingController {
                 target.setThumbnail(newThumbnail);
             } catch (final Exception e) {
                 e.printStackTrace();
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new APIError<>("could not save images"));
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(apiErrorHelper.getInternalServerError());
             }
         }
         recipeService.update(target);
@@ -117,7 +117,7 @@ public class APIRecipeController extends ImageHandlingController {
     private ResponseEntity<?> delete(@PathVariable final int id) {
         Recipe r = recipeService.getById(id);
         if (r == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiErrorHelper.getNotFoundError());
         }
 
         try {

@@ -47,10 +47,10 @@ public class APIIngredientController {
     public ResponseEntity<?> update(@PathVariable(name = "id") int id, @Validated @ModelAttribute IngredientForm form, BindingResult bindingResult) {
         Ingredient i = ingredientService.getById(id);
         if (i == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiErrorHelper.getNotFoundError());
         }
         if (bindingResult.hasFieldErrors()) {
-            return ResponseEntity.badRequest().body(bindingResult.getFieldErrors());
+            return ResponseEntity.badRequest().body(apiErrorHelper.getValidationError(bindingResult));
         }
         i.setName(form.getName());
         i.setQuantity(form.getQuantity());
@@ -62,7 +62,7 @@ public class APIIngredientController {
     public ResponseEntity<?> delete(@PathVariable(name = "id") int id) {
         Ingredient i = ingredientService.getById(id);
         if (i == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiErrorHelper.getNotFoundError());
         }
         ingredientService.delete(id);
         return ResponseEntity.ok().build();

@@ -45,7 +45,7 @@ public class APIRecipeProcController extends ImageHandlingController {
             @Validated @ModelAttribute RecipeProcForm form, BindingResult bindingResult) {
         Recipe recipe = recipeService.getById(recipeId);
         if (recipe == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiErrorHelper.getNotFoundError());
         }
         if (bindingResult.hasFieldErrors()) {
             return ResponseEntity.badRequest().body(apiErrorHelper.getValidationError(bindingResult));
@@ -61,7 +61,7 @@ public class APIRecipeProcController extends ImageHandlingController {
                 proc.setImage(i);
             } catch (Exception e) {
                 e.printStackTrace();
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed to save image");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(apiErrorHelper.getInternalServerError());
             }
         }
         recipeProcService.create(proc);
@@ -73,7 +73,7 @@ public class APIRecipeProcController extends ImageHandlingController {
             BindingResult bindingResult) {
         RecipeProc proc = recipeProcService.getById(id);
         if (proc == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiErrorHelper.getNotFoundError());
         }
         if (bindingResult.hasFieldErrors()) {
             return ResponseEntity.badRequest().body(apiErrorHelper.getValidationError(bindingResult));
@@ -88,7 +88,7 @@ public class APIRecipeProcController extends ImageHandlingController {
                 proc.setImage(newImage);
             } catch (Exception e) {
                 e.printStackTrace();
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed to save image");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(apiErrorHelper.getInternalServerError());
             }
         }
 
@@ -100,7 +100,7 @@ public class APIRecipeProcController extends ImageHandlingController {
     public ResponseEntity<?> delete(@PathVariable(name = "id") int id) {
         RecipeProc proc = recipeProcService.getById(id);
         if (proc == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiErrorHelper.getNotFoundError());
         }
         if (proc.getImage() != null) {
             try {

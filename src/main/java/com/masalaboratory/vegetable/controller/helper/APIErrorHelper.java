@@ -32,7 +32,15 @@ public class APIErrorHelper {
         for (FieldError fieldError: br.getFieldErrors()) {
             apiFieldErrors.add(new APIFieldError(fieldError.getField(), fieldError.getDefaultMessage()));
         }
-        return new APIError<List<APIFieldError>>("validation error!!", apiFieldErrors);
+        return new APIError<List<APIFieldError>>("validation error", APIError.VALIDATION_ERROR, apiFieldErrors);
+    }
+
+    public APIError<?> getNotFoundError() {
+        return new APIError<>("not found", APIError.NOT_FOUND_ERROR);
+    }
+
+    public APIError<?> getInternalServerError() {
+        return new APIError<>("something is wrong with the server", APIError.INTERNAL_SERVER_ERROR);
     }
 
 }
