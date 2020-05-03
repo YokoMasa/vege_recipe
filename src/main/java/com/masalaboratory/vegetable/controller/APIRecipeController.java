@@ -45,8 +45,7 @@ public class APIRecipeController extends ImageHandlingController {
     private ResponseEntity<?> get(@PathVariable final int id) {
         final Recipe r =  recipeService.getById(id);
         if (r == null) {
-            System.out.println("r == null!!");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new APIError<>("resource not found"));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         return ResponseEntity.ok().body(r);
     }
@@ -60,7 +59,6 @@ public class APIRecipeController extends ImageHandlingController {
     @PostMapping
     private ResponseEntity<?> create(@Validated @ModelAttribute final RecipeForm form, final BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            System.out.println("validation error!");
             return ResponseEntity.badRequest().body(apiErrorHelper.getValidationError(bindingResult));
         }
         Recipe target = new Recipe();
@@ -82,7 +80,7 @@ public class APIRecipeController extends ImageHandlingController {
         target.setHeaderImage(header);
         target.setThumbnail(thumbnail);
         Recipe created = recipeService.create(target);
-        return ResponseEntity.ok().body(created);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
     @PutMapping("/{id}")
@@ -93,7 +91,6 @@ public class APIRecipeController extends ImageHandlingController {
         }
 
         if (bindingResult.hasErrors()) {
-            System.out.println("validation error!");
             return ResponseEntity.badRequest().body(apiErrorHelper.getValidationError(bindingResult));
         }
 
@@ -113,12 +110,16 @@ public class APIRecipeController extends ImageHandlingController {
             }
         }
         recipeService.update(target);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(target);
     }
 
     @DeleteMapping("/{id}")
     private ResponseEntity<?> delete(@PathVariable final int id) {
         Recipe r = recipeService.getById(id);
+        if (r == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
         try {
             if (r.getHeaderImage() != null) {
                 imageSaveHelper.delete(toSavedImage(r.getHeaderImage()));

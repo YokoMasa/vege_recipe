@@ -1,6 +1,7 @@
 package com.masalaboratory.vegetable.controller;
 
 import com.masalaboratory.vegetable.controller.form.RecipeProcForm;
+import com.masalaboratory.vegetable.controller.helper.APIErrorHelper;
 import com.masalaboratory.vegetable.controller.helper.ImageSaveHelper;
 import com.masalaboratory.vegetable.model.Image;
 import com.masalaboratory.vegetable.model.Recipe;
@@ -10,6 +11,7 @@ import com.masalaboratory.vegetable.service.RecipeService;
 import com.masalaboratory.vegetable.util.SavedImage;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -30,6 +32,9 @@ public class APIRecipeProcController extends ImageHandlingController {
     private ImageSaveHelper imageSaveHelper;
 
     @Autowired
+    private APIErrorHelper apiErrorHelper;
+
+    @Autowired
     private RecipeService recipeService;
 
     @Autowired
@@ -43,7 +48,7 @@ public class APIRecipeProcController extends ImageHandlingController {
             return ResponseEntity.notFound().build();
         }
         if (bindingResult.hasFieldErrors()) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(apiErrorHelper.getValidationError(bindingResult));
         }
 
         RecipeProc proc = new RecipeProc();
@@ -56,20 +61,24 @@ public class APIRecipeProcController extends ImageHandlingController {
                 proc.setImage(i);
             } catch (Exception e) {
                 e.printStackTrace();
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed to save image");
             }
         }
         recipeProcService.create(proc);
-        return ResponseEntity.ok().body(proc);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable(name = "id") int id, @Validated @ModelAttribute RecipeProcForm form,
             BindingResult bindingResult) {
+        RecipeProc proc = recipeProcService.getById(id);
+        if (proc == null) {
+            return ResponseEntity.notFound().build();
+        }
         if (bindingResult.hasFieldErrors()) {
-            return ResponseEntity.badRequest().build();
+            return ResponseEntity.badRequest().body(apiErrorHelper.getValidationError(bindingResult));
         }
 
-        RecipeProc proc = recipeProcService.getById(id);
         proc.setDescription(form.getDescription());
 
         if (form.getImage() != null) {
@@ -79,17 +88,20 @@ public class APIRecipeProcController extends ImageHandlingController {
                 proc.setImage(newImage);
             } catch (Exception e) {
                 e.printStackTrace();
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("failed to save image");
             }
         }
 
         recipeProcService.update(proc);
-        return ResponseEntity.ok().body(proc);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable(name = "id") int id) {
-        
         RecipeProc proc = recipeProcService.getById(id);
+        if (proc == null) {
+            return ResponseEntity.notFound().build();
+        }
         if (proc.getImage() != null) {
             try {
                 imageSaveHelper.delete(toSavedImage(proc.getImage()));

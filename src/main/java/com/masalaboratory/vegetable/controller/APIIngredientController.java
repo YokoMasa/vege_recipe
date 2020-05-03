@@ -33,17 +33,14 @@ public class APIIngredientController {
     @PostMapping
     public ResponseEntity<?> create(@PathVariable(name = "recipeId") int recipeId, @Validated @ModelAttribute IngredientForm form, BindingResult bindingResult) {
         if (bindingResult.hasFieldErrors()) {
-            for (APIFieldError e: apiErrorHelper.getValidationError(bindingResult).getData()) {
-                System.out.println(e);
-            }
-            return ResponseEntity.badRequest().body(bindingResult.getFieldErrors());
+            return ResponseEntity.badRequest().body(apiErrorHelper.getValidationError(bindingResult));
         }
         Ingredient i = new Ingredient();
         i.setName(form.getName());
         i.setQuantity(form.getQuantity());
         
         ingredientService.create(recipeId, i);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PutMapping("/{id}")
@@ -63,6 +60,10 @@ public class APIIngredientController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable(name = "id") int id) {
+        Ingredient i = ingredientService.getById(id);
+        if (i == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
         ingredientService.delete(id);
         return ResponseEntity.ok().build();
     }
