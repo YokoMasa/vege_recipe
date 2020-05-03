@@ -25,6 +25,8 @@ public class RecipeForm {
     @Size(max = 255)
     private String recipeProcOrder;
 
+    private String serving;
+
     private MultipartFile image;
 
     public String getName() {
@@ -73,6 +75,14 @@ public class RecipeForm {
 
     public void setImage(MultipartFile image) {
         this.image = image;
+    }
+
+    public String getServing() {
+        return serving;
+    }
+
+    public void setServing(String serving) {
+        this.serving = serving;
     }
 
     @Override

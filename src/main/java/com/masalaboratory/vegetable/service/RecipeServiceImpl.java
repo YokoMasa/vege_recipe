@@ -2,6 +2,7 @@ package com.masalaboratory.vegetable.service;
 
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,6 +41,7 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public Recipe create(Recipe recipe) {
+        recipe.setCreateDate(new Date());
         return recipeRepository.saveAndFlush(recipe);
     }
 

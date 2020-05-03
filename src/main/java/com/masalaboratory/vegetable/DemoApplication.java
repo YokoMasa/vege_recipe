@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
@@ -28,6 +29,13 @@ public class DemoApplication implements WebMvcConfigurer {
         LocalValidatorFactoryBean localValidatorFactoryBean = new LocalValidatorFactoryBean();
         localValidatorFactoryBean.setValidationMessageSource(messageSource);
         return localValidatorFactoryBean;
-    }	
+	}	
+	
+	@Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/api/**")
+				.allowedOrigins("http://localhost:3000")
+				.allowedMethods("*");
+    }
 
 }

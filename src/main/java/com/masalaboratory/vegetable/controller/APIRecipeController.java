@@ -144,6 +144,7 @@ public class APIRecipeController extends ImageHandlingController {
         target.setLongDescription(form.getLongDescription());
         target.setRecipeProcOrder(form.getRecipeProcOrder());
         target.setIngredientOrder(form.getIngredientOrder());
+        target.setServing(form.getServing());
     }
 
 }
