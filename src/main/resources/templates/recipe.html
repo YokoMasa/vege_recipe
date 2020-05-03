@@ -26,8 +26,15 @@
 
             <div>
                 <p class="recipe-headline">手順</p>
-                <div th:each="proc: ${recipe.recipeProcs}">
-                    <p th:text="${proc.description}"></p>
+                <div class="recipe-procWrapper">
+                    <div th:each="proc, status: ${recipe.recipeProcs}" class="recipe-proc">
+                        <img th:if="${proc.image != null}" th:src="${proc.image.url}" class="recipe-proc-image">
+                        <div th:if="${proc.image == null}" class="recipe-proc-noImage noImage"></div>
+                        <div class="recipe-proc-description">
+                            <span th:text="${status.count}" class="recipe-proc-index bold"></span>
+                            <span th:text="${proc.description}"></span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

@@ -18,6 +18,22 @@ body {
     margin: 0;
 }
 
+.bold {
+    font-weight: 700;
+}
+
+.noImage {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #aaa;
+}
+
+.noImage::after {
+    content: "no image";
+    color: gray;
+}
+
 /* header */
 #header {
     height: 100px;
@@ -39,5 +55,21 @@ body {
 
 #wrapper {
     padding: 20px;
+    width: 90%;
     max-width: 1000px;
+}
+
+@media(max-width: 700px) {
+#header {
+    height: 60px;
+}
+
+.header-title {
+    font-size: 16pt;
+}
+
+.header-description {
+    font-size: 9pt;
+    color: #555;
+}
 }

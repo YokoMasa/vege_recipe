@@ -2,7 +2,6 @@ package com.masalaboratory.vegetable.controller;
 
 import com.masalaboratory.vegetable.controller.form.IngredientForm;
 import com.masalaboratory.vegetable.controller.helper.APIErrorHelper;
-import com.masalaboratory.vegetable.controller.helper.APIErrorHelper.APIFieldError;
 import com.masalaboratory.vegetable.model.Ingredient;
 import com.masalaboratory.vegetable.service.IngredientService;
 
