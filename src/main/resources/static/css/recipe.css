@@ -3,12 +3,9 @@
     margin-bottom: 3px;
 }
 
-.recipe-shortDescription {
-    margin-bottom: 40px;
-}
-
 .recipe-longDescription {
-    font-size: 13px;;
+    margin-bottom: 40px;
+    overflow-wrap: anywhere;
 }
 
 .recipe-infoWrapper {

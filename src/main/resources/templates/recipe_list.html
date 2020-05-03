@@ -20,6 +20,18 @@
                 </div>
             </a>
         </div>
+
+        <div class="paginationWrapper">
+            <div class="paginationWrapperInner">
+                <span class="paginationElement">
+                    <a th:if="${page.hasPrevious()}" th:href="@{'/recipe?page=' + ${page.previousPageable().getPageNumber()}}">＜</a>
+                </span>
+                <span class="paginationElement" th:text="${(page.getNumber() + 1) + '/' + page.getTotalPages()}"></span>
+                <span class="paginationElement">
+                    <a th:if="${page.hasNext()}" th:href="@{'/recipe?page=' + ${page.nextPageable().getPageNumber()}}">＞</a>
+                </span>
+            </div>
+        </div>
     </div>
 </body>
 </html>

@@ -7,7 +7,7 @@ import org.springframework.data.domain.Sort.Direction;
 
 public class CustomizedRecipeRepositoryImpl implements CustomizedRecipeRepository {
 
-    private static final int PAGE_SIZE = 12;
+    private static final int PAGE_SIZE = 6;
 
     @Override
     public Pageable getPagable(int page) {
