@@ -1,6 +1,7 @@
 package com.masalaboratory.vegetable.controller.form;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -24,6 +25,8 @@ public class RecipeForm {
 
     @Size(max = 255)
     private String recipeProcOrder;
+
+    private int status;
 
     private String serving;
 
@@ -83,6 +86,14 @@ public class RecipeForm {
 
     public void setServing(String serving) {
         this.serving = serving;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     @Override

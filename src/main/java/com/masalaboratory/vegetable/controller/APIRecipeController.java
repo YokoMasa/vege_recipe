@@ -8,7 +8,7 @@ import com.masalaboratory.vegetable.controller.helper.ImageSaveHelper;
 import com.masalaboratory.vegetable.model.Image;
 import com.masalaboratory.vegetable.model.Recipe;
 import com.masalaboratory.vegetable.model.RecipeProc;
-import com.masalaboratory.vegetable.service.RecipeService;
+import com.masalaboratory.vegetable.service.APIRecipeService;
 import com.masalaboratory.vegetable.util.SavedImage;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class APIRecipeController extends ImageHandlingController {
 
     @Autowired
-    private RecipeService recipeService;
+    private APIRecipeService recipeService;
 
     @Autowired
     private ImageSaveHelper imageSaveHelper;
@@ -148,6 +148,7 @@ public class APIRecipeController extends ImageHandlingController {
         target.setRecipeProcOrder(form.getRecipeProcOrder());
         target.setIngredientOrder(form.getIngredientOrder());
         target.setServing(form.getServing());
+        target.setStatus(form.getStatus());
     }
 
 }

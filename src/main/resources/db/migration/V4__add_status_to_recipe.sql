@@ -1,0 +1,2 @@
+ALTER TABLE Recipe
+ADD COLUMN status int NOT NULL DEFAULT 0;

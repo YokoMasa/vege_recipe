@@ -7,7 +7,7 @@ import com.masalaboratory.vegetable.model.Image;
 import com.masalaboratory.vegetable.model.Recipe;
 import com.masalaboratory.vegetable.model.RecipeProc;
 import com.masalaboratory.vegetable.service.RecipeProcService;
-import com.masalaboratory.vegetable.service.RecipeService;
+import com.masalaboratory.vegetable.service.APIRecipeService;
 import com.masalaboratory.vegetable.util.SavedImage;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ public class APIRecipeProcController extends ImageHandlingController {
     private APIErrorHelper apiErrorHelper;
 
     @Autowired
-    private RecipeService recipeService;
+    private APIRecipeService recipeService;
 
     @Autowired
     private RecipeProcService recipeProcService;

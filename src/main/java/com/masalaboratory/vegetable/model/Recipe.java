@@ -20,6 +20,9 @@ import javax.persistence.TemporalType;
 @Table(name = "Recipe")
 public class Recipe implements Identifiable {
 
+    public static final int STATUS_PRIVATE = 0;
+    public static final int STATUS_PUBLIC = 1;
+
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,6 +36,9 @@ public class Recipe implements Identifiable {
 
     @Column(name = "long_description")
     private String longDescription;
+
+    @Column(name = "status")
+    private int status;
 
     @Column(name = "create_date")
     @Temporal(TemporalType.DATE)
@@ -165,5 +171,12 @@ public class Recipe implements Identifiable {
         this.serving = serving;
     }
 
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
     
 }
