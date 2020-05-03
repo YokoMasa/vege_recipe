@@ -37,12 +37,11 @@ public final class ImageUtil {
     }
 
     public static ImageInformation readImageInformation(File file) throws ImageProcessingException, IOException {
-        Metadata metadata = ImageMetadataReader.readMetadata(file);
-        Directory directory = metadata.getDirectory(ExifIFD0Directory.class);
-        JpegDirectory jpegDirectory = metadata.getDirectory(JpegDirectory.class);
-    
-        int orientation = 1;
         try {
+            Metadata metadata = ImageMetadataReader.readMetadata(file);
+            Directory directory = metadata.getDirectory(ExifIFD0Directory.class);
+            JpegDirectory jpegDirectory = metadata.getDirectory(JpegDirectory.class);
+            int orientation = 1;
             orientation = directory.getInt(ExifIFD0Directory.TAG_ORIENTATION);
             int width = jpegDirectory.getImageWidth();
             int height = jpegDirectory.getImageHeight();

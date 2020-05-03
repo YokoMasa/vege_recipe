@@ -56,7 +56,8 @@ public class APIRecipeProcController extends ImageHandlingController {
         proc.setDescription(form.getDescription());
         if (form.getImage() != null) {
             try {
-                SavedImage si = imageSaveHelper.save(form.getImage());
+                SavedImage raw = imageSaveHelper.save(form.getImage());
+                SavedImage si = imageSaveHelper.createResizedImageFrom(raw, 230);
                 Image i = toImage(si);
                 proc.setImage(i);
             } catch (Exception e) {
@@ -83,7 +84,8 @@ public class APIRecipeProcController extends ImageHandlingController {
 
         if (form.getImage() != null) {
             try {
-                SavedImage si = imageSaveHelper.save(form.getImage());
+                SavedImage raw = imageSaveHelper.save(form.getImage());
+                SavedImage si = imageSaveHelper.createResizedImageFrom(raw, 230);
                 Image newImage = updateImage(proc.getImage(), si);
                 proc.setImage(newImage);
             } catch (Exception e) {

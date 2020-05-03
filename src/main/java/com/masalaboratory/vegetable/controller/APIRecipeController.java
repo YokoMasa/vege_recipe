@@ -68,9 +68,10 @@ public class APIRecipeController extends ImageHandlingController {
         Image thumbnail = null;
         if (form.getImage() != null) {
             try {
-                final SavedImage siHeader = imageSaveHelper.save(form.getImage());
+                SavedImage raw = imageSaveHelper.save(form.getImage());
+                SavedImage siHeader = imageSaveHelper.createResizedImageFrom(raw, 500);
                 header = toImage(siHeader);
-                final SavedImage siThumbnail = imageSaveHelper.createResizedImageFrom(siHeader, 300);
+                SavedImage siThumbnail = imageSaveHelper.createResizedImageFrom(siHeader, 300);
                 thumbnail = toImage(siThumbnail);
             } catch (final Exception e) {
                 e.printStackTrace();
@@ -97,7 +98,8 @@ public class APIRecipeController extends ImageHandlingController {
         bindTextFields(target, form);
         if (form.getImage() != null) {
             try {
-                final SavedImage siHeader = imageSaveHelper.save(form.getImage());
+                SavedImage raw = imageSaveHelper.save(form.getImage());
+                SavedImage siHeader = imageSaveHelper.createResizedImageFrom(raw, 500);
                 Image newHeader = updateImage(target.getHeaderImage(), siHeader);
                 target.setHeaderImage(newHeader);
 

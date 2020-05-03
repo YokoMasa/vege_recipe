@@ -10,9 +10,9 @@
     <th:block th:replace="${links}" />
 </head>
 
-<div th:fragment="header" id="header">
+<a th:href="@{/recipe}" th:fragment="header" id="header">
     <div class="header-title">おいしく健康に</div>
     <div class="header-description">健康的でおいしいごはんのレシピを紹介します</div>
-</div>
+</a>
 
 </html>
