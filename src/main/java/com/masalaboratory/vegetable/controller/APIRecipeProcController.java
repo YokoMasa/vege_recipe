@@ -60,6 +60,7 @@ public class APIRecipeProcController extends ImageHandlingController {
                 SavedImage si = imageSaveHelper.createResizedImageFrom(raw, 230);
                 Image i = toImage(si);
                 proc.setImage(i);
+                imageSaveHelper.delete(raw);
             } catch (Exception e) {
                 e.printStackTrace();
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(apiErrorHelper.getInternalServerError());
@@ -88,6 +89,7 @@ public class APIRecipeProcController extends ImageHandlingController {
                 SavedImage si = imageSaveHelper.createResizedImageFrom(raw, 230);
                 Image newImage = updateImage(proc.getImage(), si);
                 proc.setImage(newImage);
+                imageSaveHelper.delete(raw);
             } catch (Exception e) {
                 e.printStackTrace();
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(apiErrorHelper.getInternalServerError());

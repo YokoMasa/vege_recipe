@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS Recipe (
+CREATE TABLE IF NOT EXISTS recipe (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     short_description VARCHAR(511) NOT NULL,
@@ -9,24 +9,24 @@ CREATE TABLE IF NOT EXISTS Recipe (
     recipe_proc_order VARCHAR(255)
 );
 
-CREATE TABLE IF NOT EXISTS Ingredient (
+CREATE TABLE IF NOT EXISTS ingredient (
     id INT AUTO_INCREMENT PRIMARY KEY, 
     recipe_id INT NOT NULL,
     name VARCHAR(255) NOT NULL,
     quantity VARCHAR(255) NOT NULL,
     CONSTRAINT
         FOREIGN KEY (recipe_id)
-        REFERENCES Recipe (id)
+        REFERENCES recipe (id)
         ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS RecipeProc (
+CREATE TABLE IF NOT EXISTS recipeproc (
     id INT AUTO_INCREMENT PRIMARY KEY, 
     recipe_id INT NOT NULL,
     description VARCHAR(511) NOT NULL,
     image_url VARCHAR(255),
     CONSTRAINT
         FOREIGN KEY (recipe_id)
-        REFERENCES Recipe (id)
+        REFERENCES recipe (id)
         ON DELETE CASCADE ON UPDATE CASCADE
 );

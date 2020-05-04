@@ -73,6 +73,7 @@ public class APIRecipeController extends ImageHandlingController {
                 header = toImage(siHeader);
                 SavedImage siThumbnail = imageSaveHelper.createResizedImageFrom(siHeader, 300);
                 thumbnail = toImage(siThumbnail);
+                imageSaveHelper.delete(raw);
             } catch (final Exception e) {
                 e.printStackTrace();
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(apiErrorHelper.getInternalServerError());
@@ -106,6 +107,7 @@ public class APIRecipeController extends ImageHandlingController {
                 final SavedImage siThumbnail = imageSaveHelper.createResizedImageFrom(siHeader, 300);
                 Image newThumbnail = updateImage(target.getThumbnail(), siThumbnail);
                 target.setThumbnail(newThumbnail);
+                imageSaveHelper.delete(raw);
             } catch (final Exception e) {
                 e.printStackTrace();
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(apiErrorHelper.getInternalServerError());

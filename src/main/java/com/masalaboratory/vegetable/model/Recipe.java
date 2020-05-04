@@ -17,7 +17,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name = "Recipe")
+@Table(name = "recipe")
 public class Recipe implements Identifiable {
 
     public static final int STATUS_PRIVATE = 0;

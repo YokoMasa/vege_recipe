@@ -12,7 +12,7 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "Ingredient")
+@Table(name = "ingredient")
 public class Ingredient implements Identifiable {
 
     @Id
