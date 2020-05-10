@@ -1,5 +1,6 @@
 package com.masalaboratory.vegetable.controller;
 
+import com.masalaboratory.vegetable.controller.exception.NotFoundException;
 import com.masalaboratory.vegetable.model.Recipe;
 import com.masalaboratory.vegetable.service.RecipeService;
 
@@ -29,6 +30,9 @@ public class RecipeController {
     @GetMapping("/{id}")
     public String get(@PathVariable(name = "id") int id, Model model) {
         Recipe r = recipeService.getById(id);
+        if (r == null) {
+            throw new NotFoundException();
+        }
         model.addAttribute("recipe", r);
         return "recipe";
     }

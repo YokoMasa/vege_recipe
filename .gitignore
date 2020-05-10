@@ -34,5 +34,6 @@ out/
 
 ### logs ###
 *.log
+spring.log*
 
 application-prod.properties

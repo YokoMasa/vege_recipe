@@ -27,7 +27,7 @@ public class RecipeServiceImpl extends BaseRecipeService implements RecipeServic
 
     @Override
     public Recipe getById(int id) {
-        Optional<Recipe> oRecipe = recipeRepository.findById(id);
+        Optional<Recipe> oRecipe = recipeRepository.findByIdAndStatusEquals(id, Recipe.STATUS_PUBLIC);
         if (oRecipe.isPresent()) {
             Recipe r = oRecipe.get();
             sortField(r);

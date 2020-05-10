@@ -17,7 +17,7 @@ flyway {
 
 
 group = 'com.masalaboratory'
-version = '0.0.1-SNAPSHOT'
+version = 'release'
 sourceCompatibility = '1.8'
 
 repositories {

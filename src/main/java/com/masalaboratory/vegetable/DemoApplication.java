@@ -7,6 +7,7 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
@@ -22,20 +23,24 @@ public class DemoApplication implements WebMvcConfigurer {
 	}
 
 	@Bean
-    public LocalValidatorFactoryBean validator() {
+	public LocalValidatorFactoryBean validator() {
 		ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
 		messageSource.setDefaultEncoding("utf8");
 		messageSource.setBasename("message");
-        LocalValidatorFactoryBean localValidatorFactoryBean = new LocalValidatorFactoryBean();
-        localValidatorFactoryBean.setValidationMessageSource(messageSource);
-        return localValidatorFactoryBean;
-	}	
-	
+		LocalValidatorFactoryBean localValidatorFactoryBean = new LocalValidatorFactoryBean();
+		localValidatorFactoryBean.setValidationMessageSource(messageSource);
+		return localValidatorFactoryBean;
+	}
+
 	@Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/api/**")
-				.allowedOrigins("*")
-				.allowedMethods("*");
-    }
+	public void addCorsMappings(CorsRegistry registry) {
+		registry.addMapping("/api/**").allowedOrigins("*").allowedMethods("*");
+	}
+
+	@Override
+	public void addViewControllers(ViewControllerRegistry registry) {
+		WebMvcConfigurer.super.addViewControllers(registry);
+		registry.addRedirectViewController("/", "/recipe");
+	}
 
 }
