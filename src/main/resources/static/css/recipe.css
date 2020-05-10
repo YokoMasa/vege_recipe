@@ -67,7 +67,7 @@
 .recipe-proc-image {
     width: 100%;
     height: 180px;
-    object-fit: fill;
+    object-fit: cover;
     margin-bottom: 10px;
 }
 
